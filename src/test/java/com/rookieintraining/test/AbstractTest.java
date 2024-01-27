@@ -1,8 +1,5 @@
 package com.rookieintraining.test;
 
-import com.google.common.io.Files;
-import com.rookieintraining.browser.BrowserManager;
-import org.openqa.selenium.OutputType;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestNG;
@@ -10,8 +7,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.logging.Logger;

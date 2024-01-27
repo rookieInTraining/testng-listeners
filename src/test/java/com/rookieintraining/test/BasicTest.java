@@ -4,6 +4,7 @@ import com.rookieintraining.browser.BrowserManager;
 import com.rookieintraining.browser.BrowserThread;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.logging.LogEntries;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -15,7 +16,7 @@ public class BasicTest extends AbstractTest {
         return new Object[][]{
                 {"One"},
                 {"Two"},
-                {"Three"}
+                {"Three"},
         };
     }
 
@@ -24,7 +25,7 @@ public class BasicTest extends AbstractTest {
         BrowserThread driver = BrowserManager.getDriver();
         driver.get("https://www.google.com");
         Thread.sleep(5000);
-        driver.findElement(By.cssSelector("input")).sendKeys(text, Keys.ENTER);
+        driver.findElement(By.cssSelector("[name='q']")).sendKeys(text, Keys.ENTER);
         Thread.sleep(5000);
     }
 
@@ -33,9 +34,9 @@ public class BasicTest extends AbstractTest {
         BrowserThread driver = BrowserManager.getDriver();
         driver.get("https://maps.google.com");
         Thread.sleep(5000);
-        driver.get("https://duckduckgo.com");
+        driver.get("https://www.duckduckgo.com");
         Thread.sleep(5000);
-        driver.get("https://google.com");
+        driver.get("https://www.airasia.com");
     }
 
     @Test(testName = "Hello World - Failed")

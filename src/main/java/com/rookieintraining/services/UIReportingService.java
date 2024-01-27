@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.rookieintraining.browser.BrowserManager;
 import com.rookieintraining.object.Scenario;
+import com.rookieintraining.object.Suite;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.testng.ISuite;
@@ -14,14 +15,15 @@ import java.io.*;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UIReportingService implements ITestNGService {
 
-    private static final Logger LOGGER = Logger.getLogger("UIReportingService");
-    private ThreadLocal<Scenario> scenarioThreadLocal;
+    private static ThreadLocal<Scenario> scenarioThreadLocal;
     private final List<Scenario> scenarioList = Collections.synchronizedList(new ArrayList<>());
+
+    public static ThreadLocal<Scenario> getScenarioThreadLocal() {
+        return scenarioThreadLocal;
+    }
 
     public UIReportingService() {
 
@@ -33,42 +35,44 @@ public class UIReportingService implements ITestNGService {
 
     @Override
     public void startLaunch() {
-        LOGGER.setLevel(Level.OFF);
-        BrowserManager.init();
-        LOGGER.info("Started Launch");
+        scenarioThreadLocal = ThreadLocal.withInitial(() -> {
+            Scenario scenario = new Scenario();
+            scenario.suite = Suite.createOrGetInstance();
+            scenarioList.add(scenario);
+            return scenario;
+        });
     }
 
     @Override
     public void finishLaunch() {
-        BrowserManager.quitDriver();
-        LOGGER.info("Finished Launch");
+        generateReport();
     }
 
     @Override
     public void startSuite(ISuite iSuite) {
-        LOGGER.info("Started Suite");
+
     }
 
     @Override
     public void finishSuite(ISuite iSuite) {
-        generateReport();
-        LOGGER.info("Finished Suite");
+        scenarioList.forEach(scenario -> {
+            try (Writer writer = new FileWriter(System.getProperty("report.path")
+                    + "test--" + scenario.id + ".json")) {
+                writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(scenario));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
     public void startTest(ITestContext iTestContext) {
-        scenarioThreadLocal = ThreadLocal.withInitial(() -> {
-            Scenario scenario = new Scenario();
-            scenarioList.add(scenario);
-            scenario.startTime = Date.from(Instant.now());
-            return scenario;
-        });
-        LOGGER.info("Started Test");
+
     }
 
     @Override
     public void finishTest(ITestContext iTestContext) {
-        LOGGER.info("Finished Test");
+
     }
 
     @Override
@@ -77,7 +81,7 @@ public class UIReportingService implements ITestNGService {
         String testMethod = iTestResult.getMethod().getMethodName();
         scenarioThreadLocal.get().testName = testName;
         scenarioThreadLocal.get().testMethod = testMethod;
-        LOGGER.info("Started Test Method" + iTestResult.getMethod());
+        scenarioThreadLocal.get().startTime = Date.from(Instant.now());
     }
 
     @Override
@@ -93,26 +97,22 @@ public class UIReportingService implements ITestNGService {
                 + "ss-" + iTestResult.getAttribute("thread") + ".png");
         File screenshot = BrowserManager.getDriver().getScreenshotAs(OutputType.FILE);
 
-        try (Writer writer = new FileWriter(System.getProperty("report.path")
-                + "test--" + iTestResult.getAttribute("thread") + ".json");) {
+        try {
             Files.copy(screenshot,ss);
             scenarioThreadLocal.get().screenshotPaths.add(ss.getAbsolutePath());
-            writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(scenarioThreadLocal.get()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        LOGGER.info("Finished Test Method : " + status);
     }
 
     @Override
     public void startConfiguration(ITestResult iTestResult) {
-        LOGGER.info("Started Configuration");
+        scenarioThreadLocal.get().scenarioLog.add("Started Test Configurations : " + iTestResult.getAttribute("name"));
     }
 
     @Override
     public void log(String testLog) {
-        scenarioThreadLocal.get().scenarioLog.add(testLog);
-        LOGGER.info(testLog);
+        //scenarioThreadLocal.get().scenarioLog.add(testLog);
     }
 
     private void generateReport() {

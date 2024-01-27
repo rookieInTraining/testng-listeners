@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "io.freefair.aspectj.post-compile-weaving" version "6.6.1"
 }
 
 group 'org.example'
@@ -9,21 +10,36 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    testng_ver = '7.7.1'
+    wd_manager_ver = '5.2.3'
+    selenium_ver = '4.15.0'
+    aspect_ver = "1.9.19"
+}
+
 dependencies {
     // https://mvnrepository.com/artifact/org.testng/testng
-    implementation group: 'org.testng', name: 'testng', version: '7.6.1'
+    implementation group: 'org.testng', name: 'testng', version: "${testng_ver}"
     // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-    implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.2.3'
+    implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: "${wd_manager_ver}"
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.5.0'
-
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: "${selenium_ver}"
     implementation 'com.epam.reportportal:agent-java-testng:5.1.3'
-//    implementation 'com.epam.reportportal:logger-java-logback:5.1.3'
+    //implementation 'com.epam.reportportal:logger-java-logback:5.1.3'
 
+    //aop
+    implementation "org.aspectj:aspectjrt:${aspect_ver}"
+    implementation "org.aspectj:aspectjweaver:${aspect_ver}"
 
-    testImplementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.2.3'
-    testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.5.0'
-    testImplementation group: 'org.testng', name: 'testng', version: '7.6.1'
+    // FFmpeg dependencies
+    implementation group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.6'
+    implementation group: 'org.bytedeco', name: 'ffmpeg-platform', version: '4.4-1.5.6'
+
+    implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+
+    testImplementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: "${wd_manager_ver}"
+    testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: "${selenium_ver}"
+    testImplementation group: 'org.testng', name: 'testng', version: "${testng_ver}"
 }
 
 test {
@@ -42,6 +58,6 @@ test {
     }
 
     testLogging {
-        events "standard_out"//, "started"//, "standard_error"
+        events "standard_out"
     }
 }

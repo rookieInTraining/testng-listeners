@@ -2,7 +2,6 @@ package com.rookieintraining.custom;
 
 import com.rookieintraining.listeners.ReportSampleListener;
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.util.List;
 
@@ -12,6 +11,10 @@ public class AnyElement {
 
     public AnyElement(WebElement webElement) {
         this.webElement = webElement;
+    }
+
+    public WebElement getWebElement() {
+        return webElement;
     }
 
     public void click() {

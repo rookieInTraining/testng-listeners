@@ -12,6 +12,7 @@ public class BrowserManager {
     public static void init() {
         browserThread = ThreadLocal.withInitial(() -> {
             BrowserThread thread = new BrowserThread();
+            thread.getDriver();
             browserThreads.add(thread);
             return thread;
         });

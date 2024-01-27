@@ -1,5 +1,6 @@
 package com.rookieintraining.listeners;
 
+import com.rookieintraining.browser.BrowserManager;
 import com.rookieintraining.services.ITestNGService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,13 @@ public class BaseTestNGListener implements IExecutionListener, ISuiteListener, I
 
     @Override
     public void onExecutionStart() {
+        BrowserManager.init();
         testNgServices.forEach(ITestNGService::startLaunch);
     }
 
     @Override
     public void onExecutionFinish() {
+        BrowserManager.quitDriver();
         testNgServices.forEach(ITestNGService::finishLaunch);
     }
 

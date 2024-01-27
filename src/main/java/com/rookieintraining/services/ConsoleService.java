@@ -1,6 +1,5 @@
 package com.rookieintraining.services;
 
-import com.rookieintraining.browser.BrowserManager;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -18,55 +17,53 @@ public class ConsoleService implements ITestNGService {
 
     @Override
     public void startLaunch() {
-        LOGGER.setLevel(Level.OFF);
-        BrowserManager.init();
-        LOGGER.info("********* Started Launch");
+        LOGGER.setLevel(Level.WARNING);
+        LOGGER.log(Level.FINEST, "********* Started Launch");
     }
 
     @Override
     public void finishLaunch() {
-        BrowserManager.quitDriver();
-        LOGGER.info("********* Finished Launch");
+        LOGGER.log(Level.FINEST, "********* Finished Launch");
     }
 
     @Override
     public void startSuite(ISuite iSuite) {
-        LOGGER.info("********* Started Suite");
+        LOGGER.log(Level.FINEST, "********* Started Suite");
     }
 
     @Override
     public void finishSuite(ISuite iSuite) {
-        LOGGER.info("********* Finished Suite");
+        LOGGER.log(Level.FINEST, "********* Finished Suite");
     }
 
     @Override
     public void startTest(ITestContext iTestContext) {
-        LOGGER.info("********* Started Test");
+        LOGGER.log(Level.FINEST, "********* Started Test");
     }
 
     @Override
     public void finishTest(ITestContext iTestContext) {
-        LOGGER.info("********* Finished Test");
+        LOGGER.log(Level.FINEST, "********* Finished Test");
     }
 
     @Override
     public void startTestMethod(ITestResult iTestResult) {
-        LOGGER.info("********* Started Test Method");
+        LOGGER.log(Level.FINEST, "********* Started Test Method");
     }
 
     @Override
     public void finishTestMethod(String status, ITestResult iTestResult) {
-        LOGGER.info("********* Finished Test Method : " + status);
+        LOGGER.log(Level.FINEST, "********* Finished Test Method : " + status);
     }
 
     @Override
     public void startConfiguration(ITestResult iTestResult) {
-        LOGGER.info("********* Started Configuration");
+        LOGGER.log(Level.FINEST, "********* Started Configuration");
     }
 
     @Override
     public void log(String testLog) {
-        LOGGER.info("********* " + testLog);
+        LOGGER.log(Level.FINEST, "********* " + testLog);
     }
 
 }

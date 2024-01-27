@@ -7,6 +7,8 @@ public class Scenario {
 
     private static final Logger LOGGER = Logger.getAnonymousLogger();
 
+    public UUID id;
+    public Suite suite;
     public String testName;
     public String testMethod;
     public String result;
@@ -18,6 +20,7 @@ public class Scenario {
     public Date endTime;
 
     public Scenario() {
+        this.id = UUID.randomUUID();
         LOGGER.info("Initializing scenario with thread Id : " + Thread.currentThread().getId());
     }
 
