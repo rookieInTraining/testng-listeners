@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 public class RetroSpecTest extends AbstractTest {
 
-    @DataProvider(parallel = true)
+    @DataProvider(parallel = false)
     private Object[][] dp() {
         return new Object[][]{
                 {"right"},
@@ -23,7 +23,7 @@ public class RetroSpecTest extends AbstractTest {
     @Test(testName = "Hello RetroSpec", dataProvider = "dp")
     public void testFour(String text) throws InterruptedException {
         BrowserThread driver = BrowserManager.getDriver();
-        driver.get("http://localhost:4201/ui/dashboard/64bd067fd9aa6fb6db4f07dc");
+        driver.get("http://192.168.1.47:4201/ui/dashboard/6623a0959f896e6466b02d5b");
         Thread.sleep(500);
         int count = 0;
         do {
@@ -31,7 +31,7 @@ public class RetroSpecTest extends AbstractTest {
             Select dropdown = new Select(driver.findElement(By.cssSelector("#bucket")).getWebElement());
             dropdown.selectByValue(text);
             driver.findElement(By.cssSelector("button")).click();
-        } while(++count < 1000);
+        } while(++count < 100);
     }
 
 }

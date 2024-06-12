@@ -4,7 +4,6 @@ import com.rookieintraining.browser.BrowserManager;
 import com.rookieintraining.browser.BrowserThread;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.logging.LogEntries;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
